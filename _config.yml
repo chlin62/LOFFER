@@ -6,9 +6,9 @@
 # 你的博客名称，请用你想要的博客名替换“LOFFER”，以下修改都可类似处理
 # 注意，“name: LOFFER”，冒号后面的空格不可以省略。
 # 井号后面的文字是说明文档，不会被程序读取。
-name: chlin62
+name: Hank, Lin.
 # 描述/签名
-description: 
+description: 13%技術與87%嘴砲
 
 #
 # 下面的设定都是可选的
@@ -26,9 +26,9 @@ navigation:
     url: /
   - name: About
     url: /about
-  - name: archive
+  - name: Archive
     url: /archive
-  - name: tags
+  - name: Tags
     url: /tags
 
 # 每页的文章数
@@ -65,7 +65,7 @@ gitalk:
   owner: chlin62
 
 # 输入Google Analytics web tracking code
-google_analytics:
+google_analytics: UA-82833700-1
 
 # 输入你的网站域名（如果你没有添加自己的域名，而是直接用GitHub pages分配的域名的话可以省略）
 url: 
