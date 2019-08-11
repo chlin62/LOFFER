@@ -57,7 +57,13 @@ footer-links:
 footer-text: Copyright (c) 2019 Cheng-Han, Lin.
 
 # 输入Disqus shortname，即可添加评论区，细节可阅读文档。
-disqus: chlin62-github #shortname
+disqus:  #shortname
+
+gitalk:
+  clientID: 4f62e4eb5c8d2ed6945b
+  clientSecret: 780daf558814ebd7ca59092a2180f8e027116cf7
+  repo: chlin62.github.io
+  owner: chlin62
 
 # 输入Google Analytics web tracking code
 google_analytics:
