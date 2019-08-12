@@ -5,4 +5,7 @@ permalink: /about/
 ---
 
 IT engineer. 
-Domain of Interests: Cloud Computing, DevSecOps, Collective Intelligence, Social Media Analysis, Image Processing
+
+Domain of Interests: Cloud Computing, DevSecOps, Collective Intelligence, Social Media Analysis, Image Processing.
+
+
