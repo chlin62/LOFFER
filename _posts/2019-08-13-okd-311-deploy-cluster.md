@@ -14,7 +14,7 @@ tags:
 ![](https://i.imgur.com/SCdKssv.jpg)
 
 
-本篇將介紹透過 [OpenShift Ansible](https://github.com/openshift/openshift-ansible) 來快速部署 RedHat OpenShift 社區版本 `OKD (The Origin Community Distribution of Kubernetes)` 的 `release-3.11` 版本，此篇文章主要是用來筆記學習裸機機器(Bare-metal Server)部署過程與環境架構。
+本篇將介紹透過 [OpenShift Ansible](https://github.com/openshift/openshift-ansible) 來快速部署 RedHat OpenShift 社區版本 OKD (The Origin Community Distribution of Kubernetes) 的 release-3.11 版本，此篇文章主要是用來筆記學習裸機機器(Bare-metal Server)部署過程與環境架構。
 
 共同編輯: [yylin1](https://yylin1.github.io/)
 
