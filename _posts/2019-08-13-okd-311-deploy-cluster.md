@@ -1,15 +1,14 @@
 ---
+layout: post
 title: 透過 Ansible 快速部署 OpenShift 3.11(OKD) 叢集
 toc: true
 date: 2019-08-13 00:00:13
-categories: 
-- Openshift
+Author: chlin62
 tags: 
 - openshift
 - ansible
 - okd
 - 3.11
-thumbnail: /images/openshift 3.11.jpg
 ---
 
 ![](https://i.imgur.com/SCdKssv.jpg)
