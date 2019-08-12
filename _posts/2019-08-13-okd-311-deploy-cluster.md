@@ -24,6 +24,7 @@ thumbnail: /images/openshift 3.11.jpg
 ## 實驗節點資訊
 
 本次安裝作業系統採用 **CentOS 7**，測試環境為實體主機：
+
 | IP Address| Hostname | Sepc | Remark | Hard Disk Drive|
 | --------  | -------- | -------- | -------- |--------|
 | 192.168.101.130 | paas01 | 8 core/ 8G| Master node| SSD 256 GB|
@@ -42,7 +43,7 @@ thumbnail: /images/openshift 3.11.jpg
 * Production 環境建議採用 HA 架構的 OKD cluster
 * 所有進出 Cluster 流量會透過 Infra Node 進行流量進出，Web based (http/https and ws/wss) 會透過 Infra node 中的 HAProxy 進出，TCP based 的則透過 External IP
 
-```rust
+```
 
   Route(Ingress Controller)            +---------------------+
   *.apps.paas.domain.tw                |    Master node      |
@@ -75,7 +76,7 @@ thumbnail: /images/openshift 3.11.jpg
     * **Conroller Manager Server**: Controller Manager 主要透過ETCD上的資料對cluster 物件進行 replication controll，並透過 API 強制將物件執行至指定狀態
 * Control plane 在 OKD 3.10 之後會透過 static pod 的形式存在於 Master 中，它們的設定 yaml 檔會存在於 /etc/origin/node/pods 中，有必要時可以對其設定進行調整
 
-```rust
+```
                                  +-------------------------+
                                  | Control Plan Static Pod |
                                  | +---------------------+ |
@@ -104,7 +105,7 @@ thumbnail: /images/openshift 3.11.jpg
 
     - Remark: 因為resource不足的緣故，故沒有安裝EFK
 
-```rust
+```
                                   +-------------------------+
                                   |          Pod            |
                                   | +---------------------+ |
@@ -139,7 +140,7 @@ thumbnail: /images/openshift 3.11.jpg
 
 為方便識別裸機機器對應名稱，這邊修改每台實體機 `hostname`
 
-```bash=
+```
 #  Master
 $　hostnamectl set-hostname paas01.paas.domain.tw
 #  Infra node
@@ -154,7 +155,7 @@ $　hostnamectl set-hostname paas01.paas.domain.tw
 
 配置 CentOS 系統網路，透過CLI設定配置當前實體機網卡(ifcfg-xxx):
 
-```shell=
+```
 # ifcfg-em1 是網卡名稱，如果是 eth0 修改對應網卡 ifcfg-eth0
 
 $ vim /etc/sysconfig/network-scripts/ifcfg-em1
@@ -183,7 +184,7 @@ DOMAIN=paas.domain.tw
 ```
 ### 設定完後重啟 NetworkManager
 
-```bash=
+```
 $ systemctl restart NetworkManager
 $ cat /etc/resolv.conf 
 
@@ -198,7 +199,7 @@ nameserver 8.8.8.8
 * 在撒 ansible playbook 前，因為 ansible 會透過 ssh 對 cluster machine 進行指令操作，所以我們要先對 cluster nodes 進行 ssh 免密碼登入設定
 
 
-```shell=
+```
 $ ssh-keygen 
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa): 
@@ -225,7 +226,7 @@ The key's randomart image is:
 ...
 ```
 
-```shell=
+```
 $ for seq in {1..5};
 do
     ssh-copy-id root@paas0$seq.paas.domain.tw; \
@@ -246,7 +247,7 @@ done
 
 修改方式如下：
 
-```shell=
+```
 $ cat /etc/selinux/config
 $ enforcing
 $ seenforcing
@@ -298,7 +299,7 @@ done
 
 ## 安裝依賴套件 (Install dependency packages) 
 
-```shell=
+```
 $ for seq in {1..5};
 do
     ssh root@paas0$seq.paas.domain.tw  yum install wget git net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct bash-completion.noarch bash-completion-extras.noarch python-passlib NetworkManager -y
@@ -308,7 +309,7 @@ done
 
 ### 安裝 Docker (Install docker)
 
-```shell=
+```
 $ for seq in {1..5};
 do
 ssh root@paas0$seq.paas.domain.tw yum install docker-1.13.1 -y;
@@ -334,7 +335,7 @@ done
 
 此部分於部署節點 (此實驗採用 `Master節點`） 啟用 EPEL 倉庫以安裝 Ansible
 
-```shell=
+```
 # 全局禁用EPEL套件庫，以便在安裝的後續步驟中不會有狀況
 $ yum -y install epel-release;
 $ yum -y --enablerepo=epel install ansible pyOpenSSL;
@@ -342,7 +343,7 @@ $ yum -y --enablerepo=epel install ansible pyOpenSSL;
 
 ## B. Openshift Ansible 下載
 
-```shell=
+```
 $ wget https://github.com/openshift/openshift-ansible/archive/openshift-ansible-3.11.136-1.zip
 $ yum install unzip
 $ unzip openshift-ansible-3.11.136-1.zip
@@ -363,7 +364,7 @@ $ cp openshift-ansible-openshift-ansible-3.11.136-1/ansible.cfg .
     * **CA Expired Date Setting**: 將憑證日期延長至20年
     * 因為部分的 add-on 有 persistent volume 需要(e.g. EFK)，其餘設定都暫時先用設定，夠過後續安裝的方式安裝。
 
-```bash=
+```
 #reate an OSEv3 group that contains the masters and nodes groups
 [OSEv3:children]
 masters
@@ -437,14 +438,14 @@ paas05.paas.domain.tw openshift_node_group_name='node-config-compute-crio'
 ## Prerequisites
 * 安裝 pre requisites rpm
 * production mode 建議透過offline install 的方式安裝，保存安裝時所使用的rpm檔
-```bash=
+```
 $ ansible-playbook -i inventory.ini openshift-ansible-openshift-ansible-3.11.136-1/playbooks/prerequisites.yml 
 ```
 
 ## Deploy Cluster
 
 * 開始部署節點
-```bash=
+```
 $ ansible-playbook -i inventory.ini openshift-ansible-openshift-ansible-3.11.136-1/playbooks/deploy_cluster.yml 
 ```
 
@@ -452,11 +453,11 @@ $ ansible-playbook -i inventory.ini openshift-ansible-openshift-ansible-3.11.136
 ## 後續設定
 - 增加 admin 帳號 (登入webconsole)
 - inventory 一開始預設有指定透過/etc/origin/master/htpasswd 作為基本的 identity provider 驗證
-```bash=
+```
 $ htpasswd -c /etc/origin/master/htpasswd admin
 ```
 * 對 htpasswd admin user 進行cluster role binding (cluster-admin)
-```bash=
+```
 $ oc adm policy add-cluster-role-to-user cluster-admin admin
 ```
 * 最後我們就可以透過inventory 設定的url登入Openshift webconsole 介面了
